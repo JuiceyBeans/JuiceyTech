@@ -1,18 +1,21 @@
-package com.example.examplemod;
+package com.juiceybeans.juiceytech;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.juiceybeans.juiceytech.common.data.JTRecipes;
 import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
 
+import static com.juiceybeans.juiceytech.JTMain.MOD_ID;
+
 @SuppressWarnings("unused")
 @GTAddon
-public class ExampleGTAddon implements IGTAddon {
+public class JTGTAddon implements IGTAddon {
     @Override
     public GTRegistrate getRegistrate() {
-        return ExampleMod.EXAMPLE_REGISTRATE;
+        return JTMain.JT_REGISTRATE;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public String addonModId() {
-        return ExampleMod.MOD_ID;
+        return MOD_ID;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class ExampleGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
+        JTRecipes.init(provider);
         //CustomRecipes.init(provider);
     }
     

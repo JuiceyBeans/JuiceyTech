@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.juiceybeans.juiceytech;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -7,6 +7,10 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.juiceybeans.juiceytech.common.data.JTMachines;
+import com.juiceybeans.juiceytech.common.data.JTMaterials;
+import com.juiceybeans.juiceytech.common.data.JTRecipeTypes;
+import com.juiceybeans.juiceytech.common.data.JTTabs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -19,14 +23,18 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(ExampleMod.MOD_ID)
-public class ExampleMod {
-    public static final String MOD_ID = "examplemod";
-    public static final Logger LOGGER = LogManager.getLogger();
-    public static GTRegistrate EXAMPLE_REGISTRATE = GTRegistrate.create(ExampleMod.MOD_ID);
+import static com.juiceybeans.juiceytech.JTMain.MOD_ID;
 
-    public ExampleMod() {
+@Mod(MOD_ID)
+public class JTMain {
+    public static final String MOD_ID = "juiceytech";
+    public static final Logger LOGGER = LogManager.getLogger();
+    public static GTRegistrate JT_REGISTRATE = GTRegistrate.create(MOD_ID);
+
+    public JTMain() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        JTTabs.init();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -42,6 +50,10 @@ public class ExampleMod {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
+    }
+
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             LOGGER.info("Hello from common setup! This is *after* registries are done, so we can do this:");
@@ -53,27 +65,23 @@ public class ExampleMod {
         LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
     }
 
-    // You MUST have this for custom materials.
-    // Remember to register them not to GT's namespace, but your own.
     private void addMaterialRegistries(MaterialRegistryEvent event) {
-        GTCEuAPI.materialManager.createRegistry(ExampleMod.MOD_ID);
+        GTCEuAPI.materialManager.createRegistry(MOD_ID);
     }
 
-    // As well as this.
     private void addMaterials(MaterialEvent event) {
-        //CustomMaterials.init();
+        JTMaterials.init();
     }
 
-    // This is optional, though.
     private void modifyMaterials(PostMaterialEvent event) {
-        //CustomMaterials.modify();
+        //JTMaterials.modify();
     }
 
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        //CustomRecipeTypes.init();
+        JTRecipeTypes.init();
     }
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        //CustomMachines.init();
+        JTMachines.init();
     }
 }
